@@ -21,7 +21,7 @@ jobs:
       if: success()
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN }}
         commit-message: "Sync changes from main to develop"
         title: "Sync changes from main to develop"
         head: main
