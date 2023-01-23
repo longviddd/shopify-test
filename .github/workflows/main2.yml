@@ -1,0 +1,32 @@
+name: Check for Shopify bot changes
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.TOKEN }}
+    - name: Configure Git user email
+      run: git config --global user.email "you@example.com"
+    - name: Configure Git user name
+      run: git config --global user.name "Your Name"
+    - name: Get latest commits
+      run: git fetch --all
+    - name: Check commit message of last push
+      run: |
+        LAST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
+        if [ "$LAST_COMMIT_MESSAGE" == "Update from Shopify for theme shopify-test/main" ]; then
+          git branch live-change-$(date +%s)
+          git checkout live-change-$(date +%s)
+          git push https://${GITHUB_ACTOR}:${{ secrets.TOKEN }}@github.com/longviddd/shopify-test.git live-change-$(date +%s)
+        else
+          echo "The last push was not made by shopify[bot], the action will stop running"
+        fi
