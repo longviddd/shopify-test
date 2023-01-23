@@ -32,9 +32,9 @@ jobs:
     - name: Get latest commits after new branch
       run: git fetch --all
     - name: Create pull request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         title: "Update from Shopify for theme shopify-test/main"
-        head: live-change-$(date +%s)
+        branch: live-change-$(date +%s)
         base: develop
         token: ${{ secrets.TOKEN }}
