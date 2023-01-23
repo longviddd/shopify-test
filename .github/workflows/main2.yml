@@ -30,7 +30,7 @@ jobs:
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
     - name: Create pull request
-      uses: actions/create-pull-request@v2
+      uses: peter-evans/create-pull-request@v3
       with:
         title: "Update from Shopify for theme shopify-test/main"
         head: live-change-$(date +%s)
