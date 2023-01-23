@@ -1,0 +1,29 @@
+name: Create PR on develop
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Check user
+      id: check_user
+      run: |
+        if [ "${{ github.actor }}" != "shopify[bot]" ]; then
+          echo "This change was not made by the shopify[bot], exiting action"
+          exit 78
+        fi
+    - name: Create PR
+      if: steps.check_user.outputs.exit-code != 78
+      uses: peter-evans/create-pull-request@v3
+      with:
+        token: ${{ secrets.TOKEN }}
+        commit-message: "Sync changes from main to develop"
+        title: "Sync changes from main to develop"
+        head: main
+        base: develop
