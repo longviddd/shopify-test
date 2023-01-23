@@ -20,16 +20,25 @@ jobs:
           git branch live-change-$(date +%s)
           git checkout live-change-$(date +%s)
           git push https://${GITHUB_ACTOR}:${{ secrets.TOKEN }}@github.com/longviddd/shopify-test.git live-change-$(date +%s)
-          - name: Create Pull Request
-            uses: peter-evans/create-pull-request@v4
-            with:
-              commit-message: Cloud - Update available list
-              title: Cloud - Update available list
-              body: Cloud - Update available list
-              base: develop
-              labels: automated-pr, Clouds & Regions
-              branch: live-change-$(date +%s)
-              delete-branch: true
         else
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
+    - name: Check if branch exists
+      run: |
+        if git rev-parse --verify live-change-$(date +%s) >/dev/null 2>&1; then
+          echo "Branch exists"
+        else
+          echo "Branch does not exist"
+          exit 0
+        fi
+    - name: Create Pull Request
+      if: success()
+      uses: peter-evans/create-pull-request@v4
+      with:
+        commit-message: Update from Shopify for theme shopify-test/main
+        title: Update from Shopify for theme shopify-test/main
+        body: Update from Shopify for theme shopify-test/main
+        base: main
+        labels: automated-pr
+        branch: live-change-$(date +%s)
+        delete-branch: true
