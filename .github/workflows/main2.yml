@@ -1,31 +1,26 @@
-name: Main to Develop PR
+name: Shopify live change
 
 on:
   push:
     branches:
       - main
-    paths:
-      - '**'
-    tags:
-      - '**'
-    author:
-      - shopify[bot]
 
 jobs:
-  create_pr:
+  create_live_change:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2
-      
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v3
+    - name: Check for shopify bot
+      if: contains(github.event.head_commit.message, 'shopify[bot]')
+      run: echo "shopify bot detected"
+    - name: Create live-change branch
+      run: |
+        git checkout -b live-change-$(date +%s)
+        git push -u origin live-change-$(date +%s)
+    - name: Create pull request
+      uses: peter-evans/create-pull-request@v2
       with:
-        title: "Sync Changes from Main to Develop"
-        head: main
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: "Live change"
+        head: live-change-$(date +%s)
         base: develop
-        labels: "sync"
-        draft: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
