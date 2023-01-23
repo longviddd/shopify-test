@@ -1,32 +1,31 @@
-name: Create PR on develop
+name: Main to Develop PR
 
 on:
   push:
     branches:
       - main
+    paths:
+      - '**'
+    tags:
+      - '**'
+    author:
+      - shopify[bot]
 
 jobs:
   create_pr:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
+    - name: Checkout Repo
       uses: actions/checkout@v2
-    - name: Configure Git
-      run: |
-        git config --global user.name "Your Name"
-        git config --global user.email "youremail@example.com"
-    - name: Check user
-      run: |
-        if [ "${{ github.actor }}" != "shopify[bot]" ]; then
-          echo "This change was not made by the shopify[bot], exiting action"
-          exit 0
-        fi
-    - name: Create PR
-      if: success()
+      
+    - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
-        token: ${{ secrets.TOKEN }}
-        commit-message: "Sync changes from main to develop"
-        title: "Sync changes from main to develop"
+        title: "Sync Changes from Main to Develop"
         head: main
         base: develop
+        labels: "sync"
+        draft: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
