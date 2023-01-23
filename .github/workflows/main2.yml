@@ -20,7 +20,7 @@ jobs:
     - name: Create pull request
       uses: peter-evans/create-pull-request@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.TOKEN }}
         title: "Live change"
         head: live-change-$(date +%s)
         base: develop
