@@ -1,4 +1,4 @@
-name: Create PR
+name: Check for Shopify bot changes
 
 on:
   push:
