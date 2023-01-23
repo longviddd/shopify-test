@@ -27,4 +27,6 @@ jobs:
       with:
         token: ${{ secrets.TOKEN }}
         commit-message: "Sync changes from main to develop"
-        title: "Sync
+        title: "Sync changes from main to develop"
+        head: main
+        base: develop
