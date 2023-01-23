@@ -11,6 +11,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+    - name: Configure Git
+      run: |
+        git config --global user.name "Your Name"
+        git config --global user.email "youremail@example.com"
     - name: Check user
       run: |
         if [ "${{ github.actor }}" != "shopify[bot]" ]; then
