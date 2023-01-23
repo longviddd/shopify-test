@@ -24,12 +24,13 @@ jobs:
         LAST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
         if [ "$LAST_COMMIT_MESSAGE" == "Update from Shopify for theme shopify-test/main" ]; then
           git branch live-change-$(date +%s)
-          git push --set-upstream origin live-change-$(date +%s)
           git checkout live-change-$(date +%s)
           git push https://${GITHUB_ACTOR}:${{ secrets.TOKEN }}@github.com/longviddd/shopify-test.git live-change-$(date +%s)
         else
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
+    - name: Get latest commits after new branch
+      run: git fetch --all
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3
       with:
@@ -37,4 +38,3 @@ jobs:
         head: live-change-$(date +%s)
         base: develop
         token: ${{ secrets.TOKEN }}
-
