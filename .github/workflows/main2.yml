@@ -27,6 +27,14 @@ jobs:
           git branch live-change-$(date +%s)
           git checkout live-change-$(date +%s)
           git push https://${GITHUB_ACTOR}:${{ secrets.TOKEN }}@github.com/longviddd/shopify-test.git live-change-$(date +%s)
+          - name: Create pull request
+            uses: peter-evans/create-pull-request@v3
+            with:
+              token: ${{ secrets.TOKEN }}
+              commit-message: 'Update from Shopify for theme shopify-test/main'
+              title: 'Shopify bot changes'
+              head: 'live-change-$(date +%s)'
+              base: 'develop'
         else
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
