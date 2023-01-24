@@ -1,5 +1,4 @@
 name: Check for Shopify bot changes
-
 on:
   push:
     branches:
@@ -29,15 +28,12 @@ jobs:
           git branch $new_branch_name
           git push --set-upstream origin $new_branch_name
           git checkout $new_branch_name
+    - name: Install hub
+      run: sudo apt-get install hub
+    - name: Create pull request
+      run: |
+        git push -u origin $new_branch_name
+        hub pull-request -b develop -h $new_branch_name -m "Update from Shopify for theme shopify-test/main"
         else
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
-    - name: Get latest commits after new branch
-      run: git fetch --all
-    - name: Create pull request
-      uses: peter-evans/create-pull-request@v4
-      with:
-        title: "Update from Shopify for theme shopify-test/main"
-        branch: $new_branch_name
-        base: develop
-        token: ${{ secrets.TOKEN }}
