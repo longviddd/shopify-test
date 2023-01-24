@@ -20,6 +20,8 @@ jobs:
       run: git fetch --all
     - name: Install hub
       run: sudo apt-get install hub
+    - name: Set GITHUB_TOKEN
+      run: echo "::set-env name=GITHUB_TOKEN::${{ secrets.TOKEN }}"
     - name: Check commit message of last push
       run: |
         LAST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
