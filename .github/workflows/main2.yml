@@ -20,8 +20,6 @@ jobs:
       run: git fetch --all
     - name: Install hub
       run: sudo apt-get install hub
-    - name: Set GITHUB_TOKEN
-      run: echo "::set-env name=GITHUB_TOKEN::${{ secrets.TOKEN }}"
     - name: Check commit message of last push
       run: |
         LAST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
@@ -33,7 +31,7 @@ jobs:
           git push --set-upstream origin $new_branch_name
           git checkout $new_branch_name
           git push -u origin $new_branch_name
-          hub pull-request -b develop -h $new_branch_name -m "Update from Shopify for theme shopify-test/main"
+          hub pull-request -b develop -h $new_branch_name -m "Update from Shopify for theme shopify-test/main" -t ${{ secrets.TOKEN }}
         else
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
