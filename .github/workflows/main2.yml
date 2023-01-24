@@ -23,9 +23,12 @@ jobs:
       run: |
         LAST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
         if [ "$LAST_COMMIT_MESSAGE" == "Update from Shopify for theme shopify-test/main" ]; then
-          git branch live-change-${{ env.GITHUB_SHA }}
-          git push --set-upstream origin live-change-${{ env.GITHUB_SHA }}
-          git checkout live-change-${{ env.GITHUB_SHA }}
+          current_time=$(date "+%Y.%m.%d-%H.%M.%S")
+          random_number=$(shuf -i 1-1000 -n 1)
+          new_branch_name="live-change-$current_time-$random_number"
+          git branch $new_branch_name
+          git push --set-upstream origin $new_branch_name
+          git checkout $new_branch_name
         else
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
@@ -35,6 +38,6 @@ jobs:
       uses: peter-evans/create-pull-request@v4
       with:
         title: "Update from Shopify for theme shopify-test/main"
-        branch: live-change-${{ env.GITHUB_SHA }}
+        branch: $new_branch_name
         base: develop
         token: ${{ secrets.TOKEN }}
