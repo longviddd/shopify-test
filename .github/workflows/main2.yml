@@ -31,7 +31,9 @@ jobs:
           git push --set-upstream origin $new_branch_name
           git checkout $new_branch_name
           git push -u origin $new_branch_name
-          hub pull-request -b develop -h $new_branch_name -m "Update from Shopify for theme shopify-test/main" -t ${{ secrets.TOKEN }}
+          hub pull-request -b develop -h $new_branch_name -m "Update from Shopify for theme shopify-test/main"
         else
           echo "The last push was not made by shopify[bot], the action will stop running"
         fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
