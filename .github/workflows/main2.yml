@@ -22,8 +22,8 @@ jobs:
       run: sudo apt-get install hub
     - name: Check commit message of last push
       run: |
-        LAST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-        if [ "$LAST_COMMIT_MESSAGE" == "Update from Shopify for theme shopify-test/main" ]; then
+        LAST_COMMIT_AUTHOR=$(git log -1 --pretty=format:"%an")
+        if [ "$LAST_COMMIT_AUTHOR" == "shopify[bot]" ]; then
           current_time=$(date "+%Y.%m.%d-%H.%M.%S")
           random_number=$(shuf -i 1-1000 -n 1)
           new_branch_name="live-change-$current_time-$random_number"
